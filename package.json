@@ -1,0 +1,31 @@
+{
+  "name": "ts-debounce",
+  "version": "1.0.0",
+  "description": "Utility functions for debouncing, throttling, and string formatting in TypeScript",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "keywords": [
+    "debounce",
+    "throttle",
+    "format",
+    "utility",
+    "typescript"
+  ],
+  "author": "OMD-123 <omd4485@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}
