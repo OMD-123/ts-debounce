@@ -2,7 +2,7 @@
 
 > **Lightweight, zero-dependency TypeScript utilities for debouncing, throttling, and string formatting.**
 
-![ts-debounce Architecture](docs/architecture.svg)
+![ts-debounce Architecture](assets/architecture.png)
 
 [![npm version](https://img.shields.io/npm/v/ts-debounce.svg)](https://www.npmjs.com/package/ts-debounce)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/OMD-123/ts-debounce/ci.yml?branch=main)](https://github.com/OMD-123/ts-debounce/actions)
