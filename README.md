@@ -2,6 +2,8 @@
 
 > **Lightweight, zero-dependency TypeScript utilities for debouncing, throttling, and string formatting.**
 
+![ts-debounce Architecture](docs/architecture.svg)
+
 [![npm version](https://img.shields.io/npm/v/ts-debounce.svg)](https://www.npmjs.com/package/ts-debounce)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/OMD-123/ts-debounce/ci.yml?branch=main)](https://github.com/OMD-123/ts-debounce/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -27,6 +29,14 @@
 - **🌍 Universal** - Works in Node.js, browsers, Deno, Bun
 - **🧪 Well-Tested** - 12 comprehensive unit tests
 - **📖 Battle-Tested Patterns** - Standard implementations used in production
+
+---
+
+## How It Works
+
+![ts-debounce Architecture](docs/architecture.svg)
+
+*Visual overview of the three core utilities and their execution patterns.*
 
 ---
 

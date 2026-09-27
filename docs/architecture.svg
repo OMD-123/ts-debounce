@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#fafafa"/>
+  
+  <!-- Definitions -->
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="debounceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#61dafb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1fa2ff;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="throttleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="formatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="centerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Arrow marker -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" />
+    </marker>
+    
+    <!-- Dot pattern -->
+    <pattern id="dots" patternUnits="userSpaceOnUse" width="20" height="20">
+      <circle cx="2" cy="2" r="1" fill="#e5e7eb"/>
+    </pattern>
+  </defs>
+  
+  <!-- Subtle grid pattern -->
+  <rect width="800" height="400" fill="url(#dots)" opacity="0.3"/>
+  
+  <!-- Center hub -->
+  <g transform="translate(400, 200)">
+    <!-- Outer glow -->
+    <circle r="90" fill="url(#centerGrad)" opacity="0.15"/>
+    <circle r="75" fill="url(#centerGrad)" opacity="0.25"/>
+    
+    <!-- Center circle -->
+    <circle r="60" fill="url(#centerGrad)" stroke="#ffffff" stroke-width="2"/>
+    
+    <!-- Logo text -->
+    <text x="0" y="-8" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">ts-debounce</text>
+    <text x="0" y="10" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#ffffff" opacity="0.9">zero-dep utilities</text>
+    
+    <!-- Three connection points -->
+    <circle cx="-60" cy="0" r="6" fill="#ffffff" stroke="url(#debounceGrad)" stroke-width="2"/>
+    <circle cx="60" cy="0" r="6" fill="#ffffff" stroke="url(#throttleGrad)" stroke-width="2"/>
+    <circle cx="0" cy="60" r="6" fill="#ffffff" stroke="url(#formatGrad)" stroke-width="2"/>
+  </g>
+  
+  <!-- DEBOUNCE branch (left) -->
+  <g transform="translate(80, 200)">
+    <!-- Branch line -->
+    <line x1="0" y1="0" x2="180" y2="0" stroke="#d1d5db" stroke-width="2" stroke-dasharray="8,4"/>
+    
+    <!-- Module card -->
+    <rect x="200" y="-80" width="160" height="160" rx="12" fill="#ffffff" stroke="url(#debounceGrad)" stroke-width="2" filter="drop-shadow(0 4px 12px rgba(97, 218, 251, 0.15))"/>
+    
+    <!-- Title -->
+    <text x="280" y="-55" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#1f2937">DEBOUNCE</text>
+    <text x="280" y="-40" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6b7280">Wait for quiet</text>
+    
+    <!-- Visual: Rapid calls -->
+    <g transform="translate(220, -20)">
+      <text x="0" y="0" text-anchor="start" font-family="monospace" font-size="9" fill="#61dafb">●●●●●</text>
+      <text x="0" y="16" text-anchor="start" font-family="monospace" font-size="9" fill="#d1d5db">░░░░░</text>
+      <text x="0" y="32" text-anchor="start" font-family="monospace" font-size="9" fill="#61dafb">●</text>
+      <!-- Arrow -->
+      <line x1="0" y1="44" x2="0" y2="56" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+      <text x="0" y="70" text-anchor="start" font-family="monospace" font-size="9" fill="#10b981">● single</text>
+    </g>
+    
+    <!-- Timeline visualization -->
+    <g transform="translate(220, 50)">
+      <!-- Timeline track -->
+      <line x1="0" y1="0" x2="100" y2="0" stroke="#e5e7eb" stroke-width="3" stroke-linecap="round"/>
+      
+      <!-- Rapid calls -->
+      <circle cx="10" cy="0" r="4" fill="#61dafb" opacity="0.6"/>
+      <circle cx="22" cy="0" r="4" fill="#61dafb" opacity="0.7"/>
+      <circle cx="34" cy="0" r="4" fill="#61dafb" opacity="0.8"/>
+      <circle cx="46" cy="0" r="4" fill="#61dafb"/>
+      
+      <!-- Wait period -->
+      <line x1="50" y1="-8" x2="85" y2="-8" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" stroke-dasharray="6,3"/>
+      <text x="67" y="-16" text-anchor="middle" font-family="monospace" font-size="8" fill="#f59e0b">wait 300ms</text>
+      
+      <!-- Single execution -->
+      <circle cx="95" cy="0" r="5" fill="#10b981"/>
+      <text x="95" y="18" text-anchor="middle" font-family="monospace" font-size="8" fill="#10b981">execute</text>
+    </g>
+    
+    <!-- Code snippet -->
+    <rect x="210" y="105" width="140" height="50" rx="6" fill="#1f2937"/>
+    <text x="218" y="120" font-family="monospace" font-size="8" fill="#61dafb">debounce(fn, 300)</text>
+    <text x="218" y="133" font-family="monospace" font-size="8" fill="#9ca3af">// trailing only</text>
+    <text x="218" y="146" font-family="monospace" font-size="8" fill="#9ca3af">// cancel(), flush()</text>
+  </g>
+  
+  <!-- THROTTLE branch (right) -->
+  <g transform="translate(540, 200)">
+    <!-- Branch line -->
+    <line x1="0" y1="0" x2="-180" y2="0" stroke="#d1d5db" stroke-width="2" stroke-dasharray="8,4"/>
+    
+    <!-- Module card -->
+    <rect x="-360" y="-80" width="160" height="160" rx="12" fill="#ffffff" stroke="url(#throttleGrad)" stroke-width="2" filter="drop-shadow(0 4px 12px rgba(16, 185, 129, 0.15))"/>
+    
+    <!-- Title -->
+    <text x="-280" y="-55" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#1f2937">THROTTLE</text>
+    <text x="-280" y="-40" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6b7280">Fixed rate limit</text>
+    
+    <!-- Visual: Regular intervals -->
+    <g transform="translate(-340, -20)">
+      <text x="0" y="0" text-anchor="start" font-family="monospace" font-size="9" fill="#10b981">●──●──●──●</text>
+      <text x="0" y="16" text-anchor="start" font-family="monospace" font-size="9" fill="#d1d5db">░░░░░░░░░</text>
+      <text x="0" y="32" text-anchor="start" font-family="monospace" font-size="9" fill="#10b981">●──●──●──●</text>
+    </g>
+    
+    <!-- Timeline visualization -->
+    <g transform="translate(-340, 50)">
+      <!-- Timeline track -->
+      <line x1="0" y1="0" x2="100" y2="0" stroke="#e5e7eb" stroke-width="3" stroke-linecap="round"/>
+      
+      <!-- Regular executions -->
+      <circle cx="5" cy="0" r="5" fill="#10b981"/>
+      <circle cx="30" cy="0" r="5" fill="#10b981"/>
+      <circle cx="55" cy="0" r="5" fill="#10b981"/>
+      <circle cx="80" cy="0" r="5" fill="#10b981"/>
+      <circle cx="95" cy="0" r="5" fill="#10b981" opacity="0.5"/>
+      
+      <!-- Interval markers -->
+      <line x1="5" y1="12" x2="5" y2="20" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <line x1="30" y1="12" x2="30" y2="20" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <line x1="55" y1="12" x2="55" y2="20" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <line x1="80" y1="12" x2="80" y2="20" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2"/>
+      
+      <text x="17" y="30" text-anchor="middle" font-family="monospace" font-size="8" fill="#6b7280">16ms</text>
+      <text x="42" y="30" text-anchor="middle" font-family="monospace" font-size="8" fill="#6b7280">16ms</text>
+      <text x="67" y="30" text-anchor="middle" font-family="monospace" font-size="8" fill="#6b7280">16ms</text>
+    </g>
+    
+    <!-- Code snippet -->
+    <rect x="-350" y="105" width="140" height="50" rx="6" fill="#1f2937"/>
+    <text x="-342" y="120" font-family="monospace" font-size="8" fill="#10b981">throttle(fn, 16)</text>
+    <text x="-342" y="133" font-family="monospace" font-size="8" fill="#9ca3af">// leading + trailing</text>
+    <text x="-342" y="146" font-family="monospace" font-size="8" fill="#9ca3af">// cancel()</text>
+  </g>
+  
+  <!-- FORMAT branch (bottom) -->
+  <g transform="translate(400, 280)">
+    <!-- Branch line -->
+    <line x1="0" y1="0" x2="0" y2="60" stroke="#d1d5db" stroke-width="2" stroke-dasharray="8,4"/>
+    
+    <!-- Module card -->
+    <rect x="-140" y="80" width="280" height="100" rx="12" fill="#ffffff" stroke="url(#formatGrad)" stroke-width="2" filter="drop-shadow(0 4px 12px rgba(245, 158, 11, 0.15))"/>
+    
+    <!-- Title -->
+    <text x="0" y="105" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#1f2937">FORMAT</text>
+    <text x="0" y="120" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6b7280">Template interpolation</text>
+    
+    <!-- Visual: Template transformation -->
+    <g transform="translate(-130, 135)">
+      <!-- Input -->
+      <rect x="0" y="0" width="260" height="28" rx="4" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
+      <text x="130" y="19" text-anchor="middle" font-family="monospace" font-size="9" fill="#92400e">'Hello {name}, you have {count} items'</text>
+      
+      <!-- Arrow -->
+      <line x1="130" y1="33" x2="130" y2="45" stroke="#4b5563" stroke-width="2" marker-end="url(#arrowhead)"/>
+      
+      <!-- Output -->
+      <rect x="0" y="50" width="260" height="28" rx="4" fill="#d1fae5" stroke="#10b981" stroke-width="1"/>
+      <text x="130" y="69" text-anchor="middle" font-family="monospace" font-size="9" fill="#065f46">'Hello Alice, you have 5 items'</text>
+      
+      <!-- Data object -->
+      <text x="130" y="88" text-anchor="middle" font-family="monospace" font-size="8" fill="#6b7280">{ name: 'Alice', count: 5 }</text>
+    </g>
+    
+    <!-- Features list -->
+    <g transform="translate(-130, 165)">
+      <text x="0" y="0" font-family="monospace" font-size="8" fill="#f59e0b">● Indexed: {0}, {1}, {2}</text>
+      <text x="140" y="0" font-family="monospace" font-size="8" fill="#f59e0b">● Named: {name}, {count}</text>
+      <text x="0" y="14" font-family="monospace" font-size="8" fill="#f59e0b">● Escaped: {{literal}}</text>
+      <text x="140" y="14" font-family="monospace" font-size="8" fill="#f59e0b">● Nested: {user.name}</text>
+    </g>
+  </g>
+  
+  <!-- Stats bar at bottom -->
+  <g transform="translate(400, 390)">
+    <text x="-180" y="0" text-anchor="middle" font-family="monospace" font-size="9" fill="#6b7280">~2KB gzipped</text>
+    <text x="0" y="0" text-anchor="middle" font-family="monospace" font-size="9" fill="#6b7280">Zero dependencies</text>
+    <text x="180" y="0" text-anchor="middle" font-family="monospace" font-size="9" fill="#6b7280">TypeScript native</text>
+  </g>
+</svg>
