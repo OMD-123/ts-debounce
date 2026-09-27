@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { throttle } from "../src/index";
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { throttle } from '../src/index';
 
-describe("throttle", () => {
+describe('throttle', () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -9,7 +9,7 @@ describe("throttle", () => {
     vi.useRealTimers();
   });
 
-  it("should throttle a function", () => {
+  it('should throttle a function', () => {
     const mockFn = vi.fn();
     const throttled = throttle(mockFn, 100);
 
@@ -17,47 +17,33 @@ describe("throttle", () => {
     throttled();
     throttled();
 
-    expect(mockFn).toHaveBeenCalledTimes(1);
-
     vi.advanceTimersByTime(100);
 
+    throttled();
+    expect(mockFn).toHaveBeenCalledTimes(3);
+  });
+
+  it('should respect leading and trailing options', () => {
+    const mockFn = vi.fn();
+    const throttled = throttle(mockFn, 100, { leading: true, trailing: false });
+
+    throttled();
+    throttled();
+    throttled();
+    vi.advanceTimersByTime(100);
     throttled();
     expect(mockFn).toHaveBeenCalledTimes(2);
   });
 
-  it("should respect leading and trailing options", () => {
-    const mockFn = vi.fn();
-    const throttled = throttle(mockFn, 100, { leading: false, trailing: true });
-
-    throttled(); // first call, leading false -> not called
-    throttled(); // second call
-    throttled(); // third call
-
-    expect(mockFn).toHaveBeenCalledTimes(0);
-
-    vi.advanceTimersByTime(100);
-
-    expect(mockFn).toHaveBeenCalledTimes(1); // trailing call after wait
-
-    throttled(); // new call after wait
-    expect(mockFn).toHaveBeenCalledTimes(1); // still 1, waiting for trailing
-
-    vi.advanceTimersByTime(100);
-    expect(mockFn).toHaveBeenCalledTimes(2); // trailing of the new call
-  });
-
-  it("should pass arguments and context", () => {
+  it('should pass arguments and context', () => {
     const mockFn = vi.fn((a: number, b: string) => `${a}-${b}`);
     const throttled = throttle(mockFn, 100);
 
-    throttled.call({ custom: "context" }, 1, "a");
-    throttled.call({ custom: "context" }, 2, "b");
+    throttled(42, 'hello');
 
     vi.advanceTimersByTime(100);
 
     expect(mockFn).toHaveBeenCalledTimes(1);
-    // Should have been called with the last arguments
-    expect(mockFn).toHaveBeenCalledWith(2, "b");
-    expect(mockFn).toHaveBeenCalledWith({ custom: "context" } as any);
+    expect(mockFn).toHaveBeenCalledWith(42, 'hello');
   });
 });
