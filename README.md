@@ -4,11 +4,7 @@
 
 ![ts-debounce Architecture](assets/architecture.png)
 
-[![npm version](https://img.shields.io/npm/v/ts-debounce.svg)](https://www.npmjs.com/package/ts-debounce)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/OMD-123/ts-debounce/ci.yml?branch=main)](https://github.com/OMD-123/ts-debounce/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/ts-debounce)](https://bundlephobia.com/package/ts-debounce)
+[![npm version](https://img.shields.io/npm/v/@omdd/ts-debounce.svg)](https://www.npmjs.com/package/@omdd/ts-debounce)\n[![Build Status](https://img.shields.io/github/actions/workflow/status/OMD-123/ts-debounce/ci.yml?branch=master)](https://github.com/OMD-123/ts-debounce/actions)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)\n[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@omdd/ts-debounce)](https://bundlephobia.com/package/@omdd/ts-debounce)
 
 ---
 
