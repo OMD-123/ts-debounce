@@ -1,6 +1,6 @@
 {
   "name": "@omdd/omd-ts-debounce",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "description": "Lightweight, zero-dependency TypeScript utilities for debouncing, throttling, and string formatting",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -14,7 +14,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc && tsc -p tsconfig.cjs.json",
