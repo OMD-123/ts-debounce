@@ -1,14 +1,16 @@
-# ts-debounce
+# @omdd/omd-ts-debounce
 
 > **Lightweight, zero-dependency TypeScript utilities for debouncing, throttling, and string formatting.**
 
-![ts-debounce Architecture](assets/architecture.png)
-
-[![npm version](https://img.shields.io/npm/v/@omdd/ts-debounce.svg)](https://www.npmjs.com/package/@omdd/ts-debounce)[![Build Status](https://img.shields.io/github/actions/workflow/status/OMD-123/ts-debounce/ci.yml?branch=master)](https://github.com/OMD-123/ts-debounce/actions)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@omdd/ts-debounce)](https://bundlephobia.com/package/@omdd/ts-debounce)
+![npm version](https://img.shields.io/npm/v/@omdd/omd-ts-debounce.svg)
+![Build Status](https://img.shields.io/github/actions/workflow/status/OMD-123/ts-debounce/ci.yml?branch=master)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)
+![Bundle Size](https://img.shields.io/bundlephobia/minzip/@omdd/omd-ts-debounce)
 
 ---
 
-## 🚀 Why Use ts-debounce?
+## 🚀 Why Use @omdd/omd-ts-debounce?
 
 When you need precise control over function execution timing without the overhead of a massive utility library.
 
@@ -27,6 +29,8 @@ When you need precise control over function execution timing without the overhea
 - **🌍 Universal Compatibility** - Native support for Node.js, Browsers, Deno, and Bun.
 - **🧪 High Confidence** - 100% coverage on core utility logic with comprehensive tests.
 - **📖 Production-Ready** - Implements standard patterns for reliability and performance.
+- **⚡ Advanced Controls** - `cancel()`, `flush()`, `pending()` methods for full lifecycle control.
+- **⏱️ maxWait Support** - Force execution after maximum delay (debounce).
 
 ---
 
@@ -34,13 +38,13 @@ When you need precise control over function execution timing without the overhea
 
 ```bash
 # npm
-npm install ts-debounce
+npm install @omdd/omd-ts-debounce
 
 # yarn
-yarn add ts-debounce
+yarn add @omdd/omd-ts-debounce
 
 # pnpm
-pnpm add ts-debounce
+pnpm add @omdd/omd-ts-debounce
 ```
 
 ---
@@ -48,7 +52,7 @@ pnpm add ts-debounce
 ## ⚡ Quick Start
 
 ```typescript
-import { debounce, throttle, format } from 'ts-debounce';
+import { debounce, throttle, format } from '@omdd/omd-ts-debounce';
 
 // 1. Debounce: Wait for user to stop typing before searching
 const searchAPI = debounce((query: string) => {
@@ -77,16 +81,44 @@ const template = format('User: {name}, Role: {role}', { name: 'Bob', role: 'Admi
 Prevents a function from being called too frequently. The target function will only be executed after `wait` milliseconds have passed since the last call.
 
 #### Options
-- `leading` (boolean): Invoke on the leading edge. Defaults to `false`.
-- `trailing` (boolean): Invoke on the trailing edge. Defaults to `true`.
-- `maxWait` (number): The maximum time `fn` is allowed to be delayed before it's executed.
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `leading` | `boolean` | `false` | Invoke on the leading edge of the timeout |
+| `trailing` | `boolean` | `true` | Invoke on the trailing edge of the timeout |
+| `maxWait` | `number` | `undefined` | Maximum time `fn` is allowed to be delayed before forced execution |
+
+#### Returned Function Methods
+
+| Method | Description |
+|--------|-------------|
+| `cancel()` | Cancel any pending execution |
+| `flush()` | Immediately invoke any pending execution and return its result |
+| `pending()` | Check if there's a pending execution |
 
 #### Usage
+
 ```typescript
+// Basic debounce
 const debounced = debounce(() => console.log('Saved!'), 1000);
 debounced(); // Timer starts
 debounced(); // Timer resets
 // ... 1s later ... "Saved!"
+
+// With options
+const save = debounce(async (data: string) => {
+  await api.save(data);
+}, 300, { 
+  leading: true,    // Execute immediately on first call
+  trailing: true,   // Execute after wait period
+  maxWait: 1000     // Force execute at least every 1000ms
+});
+
+// Control methods
+save('data');
+save.flush(); // Force immediate execution, returns Promise
+save.cancel(); // Cancel pending execution
+save.pending(); // Returns true/false
 ```
 
 ---
@@ -96,16 +128,40 @@ debounced(); // Timer resets
 Ensures a function is called at most once per every `wait` milliseconds.
 
 #### Options
-- `leading` (boolean): Invoke on the leading edge. Defaults to `true`.
-- `trailing` (boolean): Invoke on the trailing edge. Defaults to `true`.
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `leading` | `boolean` | `true` | Invoke on the leading edge of the timeout |
+| `trailing` | `boolean` | `true` | Invoke on the trailing edge of the timeout |
+
+#### Returned Function Methods
+
+| Method | Description |
+|--------|-------------|
+| `cancel()` | Cancel any pending execution |
+| `flush()` | Immediately invoke any pending execution and return its result |
+| `pending()` | Check if there's a pending execution |
 
 #### Usage
+
 ```typescript
+// Basic throttle
 const throttled = throttle(() => console.log('Tick!'), 100);
 throttled(); // Executed immediately
 throttled(); // Ignored
 // ... 100ms later ...
 throttled(); // Executed again
+
+// With options
+const onResize = throttle(() => updateLayout(), 200, {
+  leading: true,  // Execute immediately
+  trailing: true  // Execute after wait period
+});
+
+// Control methods
+onResize.flush();  // Force immediate execution
+onResize.cancel(); // Cancel pending
+onResize.pending(); // Check if pending
 ```
 
 ---
@@ -116,12 +172,14 @@ throttled(); // Executed again
 Professional string interpolation with support for indexed and named placeholders.
 
 #### Features
+
 - **Indexed**: `{0}, {1}`...
 - **Named**: `{name}, {id}`...
 - **Escaping**: `{{` and `}}` for literal braces.
 - **Nested**: Support for dot notation (e.g., `{user.name}`).
 
 #### Usage
+
 ```typescript
 // Indexed
 format('Item {0} of {1}', 1, 10); // "Item 1 of 10"
@@ -131,6 +189,9 @@ format('Hello {name}', { name: 'Om' }); // "Hello Om"
 
 // Nested
 format('Role: {user.role}', { user: { role: 'Admin' } }); // "Role: Admin"
+
+// Escaping
+format('Literal {{braces}}', {}); // "Literal {braces}"
 ```
 
 ---
@@ -138,6 +199,7 @@ format('Role: {user.role}', { user: { role: 'Admin' } }); // "Role: Admin"
 ## 🌍 Real-World Examples
 
 ### 🔍 Search Autocomplete (Debounce)
+
 Wait until the user stops typing before hitting the API to save server resources.
 
 ```typescript
@@ -150,6 +212,7 @@ input.addEventListener('input', (e) => debouncedSearch(e.target.value));
 ```
 
 ### 📜 Infinite Scroll (Throttle)
+
 Limit the frequency of scroll-position checks to maintain 60fps performance.
 
 ```typescript
@@ -161,6 +224,7 @@ window.addEventListener('scroll', onScroll);
 ```
 
 ### 💾 Form Auto-Save (Debounce + maxWait)
+
 Save drafts automatically, but force a save every 10 seconds regardless of typing.
 
 ```typescript
@@ -169,6 +233,7 @@ input.addEventListener('input', autoSave);
 ```
 
 ### 🌈 i18n / Logging (Format)
+
 Create clean, localized strings or formatted logs.
 
 ```typescript
@@ -186,8 +251,8 @@ const log = (msg: string, meta: any) =>
 
 ### Comparison with Alternatives
 
-| Feature | ts-debounce | lodash.debounce | just-debounce-it |
-|---------|-------------|-----------------|------------------|
+| Feature | @omdd/omd-ts-debounce | lodash.debounce | just-debounce-it |
+|---------|----------------------|-----------------|------------------|
 | **Bundle Size** | **~2KB** | ~8KB | ~1KB |
 | **TypeScript** | ✅ Native | ✅ @types | ✅ Native |
 | **Debounce** | ✅ | ✅ | ✅ |
@@ -195,6 +260,7 @@ const log = (msg: string, meta: any) =>
 | **Format** | ✅ | ❌ | ❌ |
 | **maxWait** | ✅ | ✅ | ❌ |
 | **Leading/Trailing** | ✅ | ✅ | ✅ |
+| **cancel/flush/pending** | ✅ | ❌ | ❌ |
 
 ### Environment Support
 
@@ -207,11 +273,27 @@ const log = (msg: string, meta: any) =>
 
 ---
 
+## 🧪 Testing
+
+```bash
+# Run tests
+npm test
+
+# Watch mode
+npm run test:watch
+
+# Type checking
+npm run typecheck
+```
+
+---
+
 ## 🤝 Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to set up the project and submit PRs.
 
 ### Good First Issues
+
 Looking for a place to start? Check out our [issues](https://github.com/OMD-123/ts-debounce/issues) and look for the `good first issue` label.
 
 ---
@@ -225,3 +307,13 @@ MIT License - see [LICENSE](LICENSE) for details.
 ## 📅 Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a full list of changes.
+
+---
+
+## 📦 Package Info
+
+- **Package**: `@omdd/omd-ts-debounce`
+- **Version**: 2.0.0
+- **Registry**: [npm](https://www.npmjs.com/package/@omdd/omd-ts-debounce)
+- **Repository**: [GitHub](https://github.com/OMD-123/ts-debounce)
+- **Author**: OMD-123 (omd4485@gmail.com)
