@@ -1,18 +1,30 @@
 {
-  "name": "ts-debounce",
-  "version": "1.0.0",
-  "description": "Utility functions for debouncing, throttling, and string formatting in TypeScript",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "name": "@omdd/ts-debounce",
+  "version": "2.0.0",
+  "description": "Lightweight, zero-dependency TypeScript utilities for debouncing, throttling, and string formatting",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc -p tsconfig.cjs.json",
     "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run test && npm run build"
+    "prepublishOnly": "npm run test && npm run build",
+    "release": "standard-version"
   },
   "keywords": [
     "debounce",
@@ -23,10 +35,16 @@
   ],
   "author": "OMD-123 <omd4485@gmail.com>",
   "license": "MIT",
-  "type": "module",
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
-    "vitest": "^1.0.0"
+    "vitest": "^1.0.0",
+    "standard-version": "^9.5.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

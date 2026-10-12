@@ -1,3 +1,4 @@
+
 /**
  * Simple string format function.
  * Replaces placeholders like {0}, {1}, ... with corresponding arguments.
