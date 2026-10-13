@@ -1,0 +1,180 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Create demo page
+        run: |
+          mkdir -p dist/public
+          cat > dist/public/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>ts-debounce Demo</title>
+            <style>
+              * { box-sizing: border-box; }
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6; }
+              .demo-section { margin-bottom: 2rem; padding: 1.5rem; border: 1px solid #e1e4e8; border-radius: 6px; background: #fafbfc; }
+              .demo-section h2 { margin-top: 0; color: #24292e; }
+              input, textarea { width: 100%; padding: 0.5rem; border: 1px solid #d1d5da; border-radius: 3px; font-family: inherit; }
+              button { padding: 0.5rem 1rem; background: #2ea44f; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 1rem; }
+              button:hover { background: #2c974b; }
+              .result { margin-top: 1rem; padding: 1rem; background: white; border: 1px solid #e1e4e8; border-radius: 3px; min-height: 2rem; font-family: monospace; white-space: pre-wrap; }
+              code { background: #f6f8fa; padding: 0.1rem 0.3rem; border-radius: 3px; }
+              pre { background: #24292e; color: #e1e4e8; padding: 1rem; border-radius: 6px; overflow-x: auto; }
+              .status { padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.875rem; font-weight: 600; }
+              .status.pending { background: #fff5b1; color: #735c0f; }
+              .status.done { background: #d4edda; color: #155724; }
+              .status.idle { background: #f1f8ff; color: #0366d6; }
+            </style>
+          </head>
+          <body>
+            <h1>ts-debounce Live Demo</h1>
+            <p>Interactive examples of <code>debounce</code>, <code>throttle</code>, and <code>format</code> from <a href="https://github.com/OMD-123/ts-debounce">ts-debounce</a>.</p>
+            
+            <!-- Debounce Demo -->
+            <div class="demo-section">
+              <h2>🔍 Debounce - Search Autocomplete</h2>
+              <p>Type in the input below. The "API call" only fires 300ms after you stop typing.</p>
+              <input type="text" id="searchInput" placeholder="Type to search...">
+              <div id="debounceStatus" class="status idle">Idle</div>
+              <div id="debounceResult" class="result">Results will appear here...</div>
+            </div>
+            
+            <!-- Throttle Demo -->
+            <div class="demo-section">
+              <h2>📜 Throttle - Scroll Handler</h2>
+              <p>Click the button rapidly. The handler fires at most once per 200ms.</p>
+              <button id="throttleBtn">Trigger Scroll Event</button>
+              <div id="throttleStatus" class="status idle">Idle</div>
+              <div id="throttleResult" class="result">Click count: 0 | Executed count: 0</div>
+            </div>
+            
+            <!-- Format Demo -->
+            <div class="demo-section">
+              <h2>🌈 Format - String Interpolation</h2>
+              <p>Try different template formats:</p>
+              <textarea id="formatTemplate" rows="3" placeholder='Enter template, e.g. "Hello {name}, you are {age}!"'>Hello {name}, welcome to {place}!</textarea>
+              <br><br>
+              <input type="text" id="formatName" placeholder="name" value="Alice">
+              <input type="text" id="formatPlace" placeholder="place" value="TypeScript">
+              <br><br>
+              <button id="formatBtn">Format</button>
+              <div id="formatResult" class="result"></div>
+            </div>
+            
+            <script type="module">
+              import { debounce, throttle, format } from './index.js';
+              
+              // Debounce Demo
+              let debounceCallCount = 0;
+              const debouncedSearch = debounce(async (query) => {
+                debounceCallCount++;
+                document.getElementById('debounceStatus').textContent = 'Executing...';
+                document.getElementById('debounceStatus').className = 'status pending';
+                
+                // Simulate API call
+                await new Promise(r => setTimeout(r, 500));
+                
+                document.getElementById('debounceResult').textContent = 
+                  `Search executed for: "${query}"\nTotal debounced calls: ${debounceCallCount}`;
+                document.getElementById('debounceStatus').textContent = 'Done';
+                document.getElementById('debounceStatus').className = 'status done';
+              }, 300);
+              
+              document.getElementById('searchInput').addEventListener('input', (e) => {
+                document.getElementById('debounceStatus').textContent = 'Waiting...';
+                document.getElementById('debounceStatus').className = 'status pending';
+                debouncedSearch(e.target.value);
+              });
+              
+              // Throttle Demo
+              let throttleClickCount = 0;
+              let throttleExecuteCount = 0;
+              const throttledHandler = throttle(() => {
+                throttleExecuteCount++;
+                document.getElementById('throttleResult').textContent = 
+                  `Click count: ${throttleClickCount} | Executed count: ${throttleExecuteCount}`;
+                document.getElementById('throttleStatus').textContent = 'Executed!';
+                document.getElementById('throttleStatus').className = 'status done';
+                setTimeout(() => {
+                  document.getElementById('throttleStatus').textContent = 'Idle';
+                  document.getElementById('throttleStatus').className = 'status idle';
+                }, 500);
+              }, 200);
+              
+              document.getElementById('throttleBtn').addEventListener('click', () => {
+                throttleClickCount++;
+                document.getElementById('throttleResult').textContent = 
+                  `Click count: ${throttleClickCount} | Executed count: ${throttleExecuteCount}`;
+                document.getElementById('throttleStatus').textContent = 'Triggered';
+                document.getElementById('throttleStatus').className = 'status pending';
+                throttledHandler();
+              });
+              
+              // Format Demo
+              document.getElementById('formatBtn').addEventListener('click', () => {
+                const template = document.getElementById('formatTemplate').value;
+                const values = {
+                  name: document.getElementById('formatName').value,
+                  place: document.getElementById('formatPlace').value
+                };
+                try {
+                  const result = format(template, values);
+                  document.getElementById('formatResult').textContent = result;
+                } catch (e) {
+                  document.getElementById('formatResult').textContent = 'Error: ' + e.message;
+                }
+              });
+            </script>
+          </body>
+          </html>
+          EOF
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
