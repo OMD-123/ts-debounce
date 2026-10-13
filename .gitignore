@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+*.tsbuildinfo
+coverage/
+.nyc_output/
+.vite/
+.DS_Store
+*.local
